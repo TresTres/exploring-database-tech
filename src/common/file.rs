@@ -4,12 +4,13 @@ use std::fs::OpenOptions;
 use std::path::PathBuf;
 
 
-fn search_for_file(filename: &str) -> Option<PathBuf> {
+fn search_for_file(filename: &str, dirname: &str) -> Option<PathBuf> {
     /*
-    Searches for a filepath, and if found returns the Path object
-    if not found, returns false
+    Searches for a filepath within the given dirname, and if found returns the Path object
+    wrapped in Some
+    if not found, returns None
     */
-    let filepath = PathBuf::from(&format!("file_directory/{}", filename));
+    let filepath = PathBuf::from(&format!("{}/{}", dirname, filename));
     let result = filepath.try_exists().unwrap();
     if result {
         return Some(filepath);
@@ -18,7 +19,8 @@ fn search_for_file(filename: &str) -> Option<PathBuf> {
 }
 
 pub fn write_to_file(filename: &str) {
-    let path = search_for_file(filename);
+    let target_dir = "file_directory";
+    let path = search_for_file(filename, target_dir);
     let mut open_options = OpenOptions::new();
     open_options.create(true).append(true).read(true);
     let mut file; 
