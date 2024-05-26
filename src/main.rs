@@ -5,7 +5,8 @@ mod common;
 
 fn main() {
     let filename = "foo.txt";
-    common::file::write_to_file(filename);
+    let target_dir = "file_directory";
+    common::file::write_to_file(filename, target_dir);
 }
 
 

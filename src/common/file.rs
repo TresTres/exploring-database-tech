@@ -18,8 +18,7 @@ fn search_for_file(filename: &str, dirname: &str) -> Option<PathBuf> {
     None
 }
 
-pub fn write_to_file(filename: &str) {
-    let target_dir = "file_directory";
+pub fn write_to_file(filename: &str, target_dir: &str) {
     let path = search_for_file(filename, target_dir);
     let mut open_options = OpenOptions::new();
     open_options.create(true).append(true).read(true);
@@ -31,7 +30,7 @@ pub fn write_to_file(filename: &str) {
         }
         None => {
             println!("File not found, creating file...");
-            file = open_options.open(&format!("file_directory/{}", filename)).unwrap();
+            file = open_options.open(&format!("{}/{}", target_dir, filename)).unwrap();
         }
     }
     writeln!(file, "key: value").expect("Failed to write to file");
