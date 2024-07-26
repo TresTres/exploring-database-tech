@@ -18,24 +18,30 @@ fn search_for_file(filename: &str, dirname: &str) -> Option<PathBuf> {
     None
 }
 
-pub fn write_to_file(filename: &str, target_dir: &str) {
+pub fn write_line_to_file(filename: &str, target_dir: &str, line: &str) -> Result<
+    (),
+    std::io::Error
+> {
     let path = search_for_file(filename, target_dir);
     let mut open_options = OpenOptions::new();
     open_options.create(true).append(true).read(true);
-    let mut file; 
+    let file_result: Result<std::fs::File, std::io::Error>; 
     match path {
         Some(path) => {
             println!("File found: {:?}", path);
-            file = open_options.open(path).unwrap();
+            file_result = open_options.open(path);
         }
         None => {
             println!("File not found, creating file...");
-            file = open_options.open(&format!("{}/{}", target_dir, filename)).unwrap();
+            file_result = open_options.open(&format!("{}/{}", target_dir, filename));
         }
     }
-    writeln!(file, "key: value").expect("Failed to write to file");
-
+    let mut file = file_result?;
+    writeln!(file, "{}", line).expect("Failed to write to file");
+    Ok(())
 }
+
+
 
 
 #[cfg(test)]

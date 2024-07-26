@@ -24,11 +24,12 @@ impl KVStore {
 
 
 pub fn write_value_to_store(store: KVStore, key: &str, value: &str) -> Result<
-    bool, 
+    (),
     std::io::Error
->{
-    file::write_to_file(store.filename.as_str(), store.target_dir.as_str());
-    Ok(true)
+> {
+
+    let line = format!("{}: {}", key, value);
+    file::write_line_to_file(store.filename.as_str(), store.target_dir.as_str(), line.as_str())
 }
 
 
