@@ -1,5 +1,10 @@
 
+use std::collections::HashMap;
+use std::path::PathBuf;
+
 use crate::common::file;
+
+
 
 
 
@@ -8,6 +13,8 @@ pub struct KVStore {
     target_dir: String,
     file_length: u64,
     buffer: Vec<u8>,
+    filepath: PathBuf,
+    data: HashMap<String, String>,
 }
 
 
@@ -18,6 +25,8 @@ impl KVStore {
             target_dir: target_dir.to_string(),
             file_length: 100, 
             buffer: Vec::new(),
+            filepath: PathBuf::from(&format!("{}/{}", target_dir, filename)),
+            data: HashMap::new(),
         }
     }
 }
@@ -29,7 +38,7 @@ pub fn write_value_to_store(store: KVStore, key: &str, value: &str) -> Result<
 > {
 
     let line = format!("{}: {}", key, value);
-    file::write_line_to_file(store.filename.as_str(), store.target_dir.as_str(), line.as_str())
+    file::write_line_to_file(store.filepath, &line)
 }
 
 
